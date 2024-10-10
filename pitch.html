@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Football 25 Pitch Guide</title>
+    <style>
+        #layout {
+            display: flex;
+        }
+
+        #pitches-grid {
+            margin-right: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        #motivations-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pitch {
+            padding: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .motivation {
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #666;
+            cursor: pointer;
+        }
+
+        .active {
+            background-color: lightgreen;
+        }
+
+        .inactive {
+            background-color: lightcoral;
+        }
+
+        .pitch-active {
+            background-color: lightgreen;
+        }
+
+        .pitch-inactive {
+            background-color: lightcoral;
+        }
+    </style>
+</head>
+<body>
+    <h1>College Football 25 Pitch Guide <button id="reset-button">Reset</button></h1>
+    <div id="layout">
+        <div id="pitches-grid">
+            <button class="pitch" data-motivations="Academic Prestige,Campus Lifestyle,Stadium Atmosphere">College Experience</button>
+            <button class="pitch" data-motivations="Athletic Facilities,Coach Stability,Proximity To Home">Team Player</button>
+            <button class="pitch" data-motivations="Academic Prestige,Campus Lifestyle,Proximity To Home">Campus Personality</button>
+            <button class="pitch" data-motivations="Conference Prestige,Playing Style,Proximity To Home">It's Game Time</button>
+            <button class="pitch" data-motivations="Coach Prestige,Conference Prestige,Proximity To Home">Prestigious</button>
+            <button class="pitch" data-motivations="Academic Prestige,Coach Prestige,Proximity To Home">Student Of The Game</button>
+            <button class="pitch" data-motivations="Campus Lifestyle,Proximity To Home,Program Tradition">Hometown Hero</button>
+            <button class="pitch" data-motivations="Athletic Facilities,Coach Prestige,Conference Prestige">Prove Yourself</button>
+            <button class="pitch" data-motivations="Pro Potential,Playing Style,Proximity To Home">The Clutch</button>
+            <button class="pitch" data-motivations="Brand Exposure,Championship Contender,Playing Time">TV Time</button>
+            <button class="pitch" data-motivations="Athletic Facilities,Coach Prestige,Proximity To Home">Coach's Favorite</button>
+            <button class="pitch" data-motivations="Athletic Facilities,Championship Contender,Proximity To Home">Aspirational</button>
+            <button class="pitch" data-motivations="Brand Exposure,Championship Contender,Coach Prestige">To The House</button>
+            <button class="pitch" data-motivations="Championship Contender,Pro Potential,Program Tradition">Football Influencer</button>
+            <button class="pitch" data-motivations="Playing Time,Playing Style,Proximity To Home">Time To Get To Work</button>
+            <button class="pitch" data-motivations="Brand Exposure,Playing Time,Pro Potential">Starter</button>
+            <button class="pitch" data-motivations="Pro Potential,Proximity To Home,Program Tradition">Grassroots</button>
+            <button class="pitch" data-motivations="Championship Contender,Conference Prestige,Proximity To Home">Conference Spotlight</button>
+            <button class="pitch" data-motivations="Championship Contender,Conference Prestige,Pro Potential">Sunday Bound</button>
+            <button class="pitch" data-motivations="Athletic Facilities,Brand Exposure,Pro Potential">Work Horse</button>
+        </div>
+
+        <div id="motivations-list">
+            <button class="motivation" data-motivation="Academic Prestige">Academic Prestige</button>
+            <button class="motivation" data-motivation="Athletic Facilities">Athletic Facilities</button>
+            <button class="motivation" data-motivation="Brand Exposure">Brand Exposure</button>
+            <button class="motivation" data-motivation="Campus Lifestyle">Campus Lifestyle</button>
+            <button class="motivation" data-motivation="Championship Contender">Championship Contender</button>
+            <button class="motivation" data-motivation="Coach Stability">Coach Stability</button>
+            <button class="motivation" data-motivation="Coach Prestige">Coach Prestige</button>
+            <button class="motivation" data-motivation="Conference Prestige">Conference Prestige</button>
+            <button class="motivation" data-motivation="Playing Time">Playing Time</button>
+            <button class="motivation" data-motivation="Pro Potential">Pro Potential</button>
+            <button class="motivation" data-motivation="Playing Style">Playing Style</button>
+            <button class="motivation" data-motivation="Proximity To Home">Proximity To Home</button>
+            <button class="motivation" data-motivation="Program Tradition">Program Tradition</button>
+            <button class="motivation" data-motivation="Stadium Atmosphere">Stadium Atmosphere</button>
+        </div>
+		
+    
+		
+    </div><p/> 
+	
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const resetButton = document.getElementById('reset-button');
+            resetButton.addEventListener('click', resetStates);
+
+            const motivations = document.querySelectorAll('.motivation');
+            const pitches = document.querySelectorAll('.pitch');
+
+            motivations.forEach(motivation => {
+                motivation.addEventListener('click', () => {
+                    cycleMotivationState(motivation);
+                    filterPitches();
+                });
+            });
+
+            function cycleMotivationState(motivation) {
+                if (motivation.classList.contains('active')) {
+                    motivation.classList.remove('active');
+                    motivation.classList.add('inactive');
+                } else if (motivation.classList.contains('inactive')) {
+                    motivation.classList.remove('inactive');
+                } else {
+                    motivation.classList.add('active');
+                }
+            }
+
+            function resetStates() {
+                motivations.forEach(motivation => {
+                    motivation.classList.remove('active', 'inactive');
+                });
+                pitches.forEach(pitch => {
+                    pitch.classList.remove('pitch-active', 'pitch-inactive');
+                });
+            }
+
+            function filterPitches() {
+                const activeMotivations = [...motivations].filter(m => m.classList.contains('active')).map(m => m.dataset.motivation);
+                const inactiveMotivations = [...motivations].filter(m => m.classList.contains('inactive')).map(m => m.dataset.motivation);
+
+                pitches.forEach(pitch => {
+                    const pitchMotivations = pitch.dataset.motivations.split(',');
+                    if (
+                        activeMotivations.every(am => pitchMotivations.includes(am)) &&
+                        !inactiveMotivations.some(im => pitchMotivations.includes(im))
+                    ) {
+                        pitch.classList.add('pitch-active');
+                        pitch.classList.remove('pitch-inactive');
+                    } else {
+                        pitch.classList.add('pitch-inactive');
+                        pitch.classList.remove('pitch-active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
